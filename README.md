@@ -186,3 +186,18 @@ Presenter - презентер содержит основную логику п
 `setCatalogList(catalogList: Product[]):void` - сохраняет каталог товаров
 `getCatalogList(): Product[]` - возвращает каталог товаров
 `getProduct(id: string): IProduct | undefined` - возвращает Товар по его уникальному идентификатору
+
+### Слой коммуникации
+
+#### Класс ProductApi
+
+Отвечает за получение данных с сервера и отправку данных на сервер. Используется функциональность класса API из стартового набора
+
+Поля класса:
+`baseUrl` - содержит URL для работы с API
+`cdnUrl` - содержит URL для работы с изображениями продуктов. 
+
+Методы класса:
+`getProductList(): Promise<IProduct[]>` - возвращает набор товаров с сервера
+`getProduct(id: string): Promise<IProduct>` - возвращает товар по идентификатору
+`orderProducts(buyer: IBuyer, productList: Product[], total: number): Promise` - отправка данных о покупке.

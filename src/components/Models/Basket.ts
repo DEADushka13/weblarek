@@ -42,7 +42,13 @@ export class Basket {
         this.productList.push(product);
     };
     //удалить из корзины
-    removeProduct(product: Product): void { };//??????????????????
+    removeProduct(product: Product): void {
+        const id = product.id;
+        const indexOfObject = this.productList.findIndex((object) => { return object.id === id; });
+        if (indexOfObject !== -1) {
+            this.productList.splice(indexOfObject, 1);
+        }
+    };
     //очистка корзины
     clearBasket(): void {
         this.productList.splice(0, this.productList.length)

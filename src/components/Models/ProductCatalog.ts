@@ -4,9 +4,9 @@ import { Product } from "./Product";
 export class ProductCatalog {
     protected catalogList: IProduct[];
     protected currentCard: IProduct;
-    setCurrentCard(product: IProduct): void { };
+    setCurrentCard(product: IProduct): void { this.currentCard = product };
     getCurrentCard(): IProduct { return this.currentCard };
-    setCatalogList(catalogList: IProduct[]): void { this.catalogList = catalogList; }//тут будет АПИ?
+    setCatalogList(catalogList: IProduct[]): void { this.catalogList = catalogList; }
     getCatalogList(): IProduct[] { return this.catalogList };
     getProduct(id: string): IProduct | undefined {
         // if (this.catalogList.find(product => product.id === id)) {

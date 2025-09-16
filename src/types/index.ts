@@ -29,6 +29,12 @@ export interface IBuyer {
     address: string;
 }
 
+export interface IOrder extends IBuyer {
+    productList: IProduct[];
+    total: number;
+}
+
+
 
 
 
