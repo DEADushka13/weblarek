@@ -1,17 +1,29 @@
-import { IApi, IProduct, IOrder } from "../types/index.ts"
+import { IApi, IProduct, IOrder, ApiListResponse } from "../types/index.ts"
 export class ProductApi {
     protected api: IApi;
-
-    constructor(api: IApi) {
+    protected cdnUrl: string;
+    constructor(api: IApi, cdnUrl: string) {
         this.api = api;
+        this.cdnUrl = cdnUrl;
     }
 
     getProductList(): Promise<IProduct[]> {
-        return this.api.get(`/product`);
+        return this.api.get(`/product`)
+            .then((response) => (response as ApiListResponse<IProduct>).items.map((product) => ({
+                ...product,
+                image: this.cdnUrl + product.image,
+            })));
     }
 
     getProduct(id: string): Promise<IProduct> {
-        return this.api.get(`/product/${id}`);
+        return this.api.get(`/product/${id}`)
+            .then((response) => {
+                const product = response as IProduct;
+                return {
+                    ...product,
+                    image: this.cdnUrl + product.image,
+                };
+            });
     }
 
     orderProducts(order: IOrder): Promise<IOrder> {
@@ -19,4 +31,3 @@ export class ProductApi {
             .post('/order', order) as Promise<IOrder>;
     }
 }
-

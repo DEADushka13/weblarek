@@ -1,4 +1,8 @@
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+export type ApiListResponse<Type> = {
+    total: number,
+    items: Type[]
+};
 
 export interface IApi {
     get<T extends object>(uri: string): Promise<T>;
@@ -33,6 +37,7 @@ export interface IOrder extends IBuyer {
     productList: IProduct[];
     total: number;
 }
+
 
 
 
