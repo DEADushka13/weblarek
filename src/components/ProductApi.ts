@@ -1,4 +1,4 @@
-import { IApi, IProduct, IOrder, ApiListResponse } from "../types/index.ts"
+import { IApi, IProduct, IOrder, ApiListResponse, ApiOrderResponse } from "../types/index.ts"
 export class ProductApi {
     protected api: IApi;
     protected cdnUrl: string;
@@ -26,8 +26,8 @@ export class ProductApi {
             });
     }
 
-    orderProducts(order: IOrder): Promise<IOrder> {
+    orderProducts(order: IOrder): Promise<ApiOrderResponse> {
         return this.api
-            .post('/order', order) as Promise<IOrder>;
+            .post('/order', order) as Promise<ApiOrderResponse>;
     }
 }
