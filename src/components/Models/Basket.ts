@@ -8,11 +8,11 @@ export class Basket {
         this.productList = [];
     }
 
-    getProductList(): Product[] {
+    getProductList(): Product[] {//++
         return this.productList;
     }
     //узнать наличие товара
-    checkProduct(id: string): boolean {
+    checkProduct(id: string): boolean {//++
         if (this.productList.find(product => product.id === id)) {
             return true
         }
@@ -20,12 +20,12 @@ export class Basket {
     }
 
     //Получение количества товаров в корзине
-    getProductCounter(): number {
+    getProductCounter(): number {//++
         return this.productList.length;
     };
 
     //Получение суммы цен товаров в корзине
-    getTotalBasketSum(): string {
+    getTotalBasketSum(): string {//++
         const totalPrice = this.productList.reduce((total, product) => {
             if (!product.price) {
                 return total;
