@@ -155,7 +155,8 @@ Presenter - презентер содержит основную логику п
 
 Методы класса:  
 `chekData() => boolean` - проверка данных о покупателе, возвращает true - если данные верны, false - если есть ошибка
-`getEmail(): string`,`getPhone(): string `,`getPayment(): "online" | "uponReceipt" | "`,`getAddress(): string ` - методы для получения данных о покупателе
+`getBuyer(): IBuyer` - метод для получения всех данных о покупателе
+`getEmail(): string`,`getPhone(): string `,`getPayment(): "online" | "uponReceipt" | "`,`getAddress(): string ` - методы для получения различных данных о покупателе
 `setEmail(email: string): void `,`setPhone(phone: string): void`,`setPayment(payment: "online" | "uponReceipt" | ""): void`,`setAddress(address: string): void` - методы для сохранения данных о покупателе
 `clearData():void` - очистить данные о покупателе
 
