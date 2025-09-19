@@ -4,6 +4,18 @@ import { IProduct } from "../../types";
 export class ProductCatalog {
   protected catalogList: IProduct[];
   protected currentCard: IProduct;
+  constructor() {
+    this.catalogList = [];
+    this.currentCard = {
+      id: "",
+      category: "",
+      description: "",
+      image: "",
+      price: 0,
+      title: "",
+    };
+  }
+
   setCurrentCard(product: IProduct): void {
     this.currentCard = product;
   }
@@ -22,17 +34,5 @@ export class ProductCatalog {
 
   getProduct(id: string): IProduct | undefined {
     return this.catalogList.find((product) => product.id === id);
-  }
-
-  constructor() {
-    this.catalogList = [];
-    this.currentCard = {
-      id: "",
-      category: "",
-      description: "",
-      image: "",
-      price: 0,
-      title: "",
-    };
   }
 }

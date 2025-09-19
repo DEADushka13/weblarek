@@ -17,4 +17,3 @@ export const categoryMap = {
     'дополнительное': 'card__category_additional',
     'другое': 'card__category_other',
 };
-

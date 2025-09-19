@@ -154,7 +154,7 @@ Presenter - презентер содержит основную логику п
 `protected address: string` - адрес покупателя для доставки
 
 Методы класса:  
-`chekData() => boolean` - проверка данных о покупателе, возвращает true - если данные верны, false - если есть ошибка
+`chekData(): {payment: string;address: string;phone: string;email: string;}` - проверка данных о покупателе, возвращает объект с ошибками, если ошибок нет- значения объекта пустые
 `getBuyer(): IBuyer` - метод для получения всех данных о покупателе
 `getEmail(): string`,`getPhone(): string `,`getPayment(): "online" | "uponReceipt" | "`,`getAddress(): string ` - методы для получения различных данных о покупателе
 `setEmail(email: string): void `,`setPhone(phone: string): void`,`setPayment(payment: "online" | "uponReceipt" | ""): void`,`setAddress(address: string): void` - методы для сохранения данных о покупателе
@@ -203,9 +203,8 @@ Presenter - презентер содержит основную логику п
 
 Поля класса:
 `api` - содержит базовое API для работы приложения
-`cdnUrl` - содержит URL для работы с изображениями товаров 
+`cdnUrl` - содержит URL для работы с изображениями товаров
 
 Методы класса:
 `getProductList(): Promise<IProduct[]>` - возвращает набор товаров с сервера
-`getProduct(id: string): Promise<IProduct>` - возвращает товар по идентификатору
 `orderProducts(order: IOrder): Promise<IOrder>` - отправка данных о покупке

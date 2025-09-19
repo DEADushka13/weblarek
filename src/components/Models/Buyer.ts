@@ -16,24 +16,35 @@ export class Buyer {
     this.email = "";
     this.phone = "";
   }
-  chekData(): string {
+
+  chekData(): {
+    payment: string;
+    address: string;
+    phone: string;
+    email: string;
+  } {
+    const errors = {
+      payment: "",
+      address: "",
+      phone: "",
+      email: "",
+    };
     if ((this.address = "")) {
-      return "empty address";
+      errors.address = "Не указан адрес";
     } else {
       if ((this.payment = "")) {
-        return "emty payment";
+        errors.payment = "Не выбран способ оплаты";
       } else {
         if ((this.email = "")) {
-          return "emty email";
+          errors.email = "Не указана электронная почта";
         } else {
           if ((this.phone = "")) {
-            return "emty phone";
-          } else {
-            return "";
+            errors.phone = "Не указан номер телефона";
           }
         }
       }
     }
+    return errors;
   }
 
   getBuyer(): IBuyer {
