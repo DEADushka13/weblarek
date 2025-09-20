@@ -37,6 +37,11 @@ console.log(
 );
 testBuyer.clearData();
 console.log("Пустая информация о покупателе", testBuyer);
+testBuyer.setAddress("qwerty");
+testBuyer.setEmail("asd@ya.ru");
+console.log("Покупатель: ", testBuyer);
+const testBuyererrors = testBuyer.chekData();
+console.log("Ошибки валидации: ", testBuyererrors);
 
 //Basket
 const testBasket = new Basket();

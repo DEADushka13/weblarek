@@ -23,26 +23,23 @@ export class Buyer {
     phone: string;
     email: string;
   } {
-    const errors = {
+    let errors = {
       payment: "",
       address: "",
       phone: "",
       email: "",
     };
-    if ((this.address = "")) {
+    if (!this.address) {
       errors.address = "Не указан адрес";
-    } else {
-      if ((this.payment = "")) {
-        errors.payment = "Не выбран способ оплаты";
-      } else {
-        if ((this.email = "")) {
-          errors.email = "Не указана электронная почта";
-        } else {
-          if ((this.phone = "")) {
-            errors.phone = "Не указан номер телефона";
-          }
-        }
-      }
+    }
+    if (!this.payment) {
+      errors.payment = "Не выбран способ оплаты";
+    }
+    if (!this.email) {
+      errors.email = "Не указана электронная почта";
+    }
+    if (!this.phone) {
+      errors.phone = "Не указан номер телефона";
     }
     return errors;
   }
