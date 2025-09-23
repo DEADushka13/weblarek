@@ -1,10 +1,11 @@
 import { IProduct } from "../../types";
+import { IEvents } from "../base/Events";
 // import { Product } from "./Product";
 //Каталог товаров
 export class ProductCatalog {
   protected catalogList: IProduct[];
   protected currentCard: IProduct;
-  constructor() {
+  constructor(protected events: IEvents) {
     this.catalogList = [];
     this.currentCard = {
       id: "",
@@ -14,10 +15,12 @@ export class ProductCatalog {
       price: 0,
       title: "",
     };
+    this.events = events;
   }
 
   setCurrentCard(product: IProduct): void {
     this.currentCard = product;
+    this.events.emit('currentCard:changed',this.currentCard);
   }
 
   getCurrentCard(): IProduct {
@@ -26,6 +29,7 @@ export class ProductCatalog {
 
   setCatalogList(catalogList: IProduct[]): void {
     this.catalogList = catalogList;
+    this.events.emit('catalogList:changed', { catalogList });
   }
 
   getCatalogList(): IProduct[] {

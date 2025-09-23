@@ -1,4 +1,5 @@
 import { IBuyer } from "../../types";
+import { IEvents } from "../base/Events";
 
 //Покупатель
 export class Buyer {
@@ -10,11 +11,12 @@ export class Buyer {
   protected payment: "online" | "uponReceipt" | "";
   //Адресс доставки
   protected address: string;
-  constructor() {
+  constructor(protected events: IEvents) {
     this.payment = "";
     this.address = "";
     this.email = "";
     this.phone = "";
+    this.events = events;
   }
 
   chekData(): {
@@ -72,18 +74,22 @@ export class Buyer {
   //сохранить данные
   setEmail(email: string): void {
     this.email = email;
+    this.events.emit('buyer:changed');
   }
 
   setPhone(phone: string): void {
     this.phone = phone;
+    this.events.emit('buyer:changed');
   }
 
   setPayment(payment: "online" | "uponReceipt" | ""): void {
     this.payment = payment;
+    this.events.emit('buyer:changed');
   }
 
   setAddress(address: string): void {
     this.address = address;
+    this.events.emit('buyer:changed');
   }
 
   clearData(): void {
@@ -91,6 +97,7 @@ export class Buyer {
     this.phone = "";
     this.payment = "";
     this.address = "";
+    this.events.emit('buyer:changed');
   }
   // constructor(email: string, phone: string, payment: "online" | "uponReceipt" | "", address: string) {
   //     this.payment = payment;

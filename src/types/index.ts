@@ -33,7 +33,7 @@ export interface IProduct {
   description: string;
 }
 
-type TPayment = "online" | "uponReceipt" | "";
+export type TPayment = "online" | "uponReceipt" | "";
 export interface IBuyer {
   payment: TPayment;
   email: string;

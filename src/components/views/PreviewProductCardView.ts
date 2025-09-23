@@ -1,6 +1,7 @@
 import { ICardActions, IProduct } from "../../types";
 import { categoryMap } from "../../utils/constants";
 import { ensureElement } from "../../utils/utils";
+import { IEvents } from "../base/Events";
 import { ProductCard } from "./ProductCard";
 
 type CategoryKey = keyof typeof categoryMap;
@@ -11,7 +12,7 @@ export class PreviewProductCardView extends ProductCard<TCardPreview> {
   protected cardImage: HTMLImageElement;
   protected cardText: HTMLElement;
   protected buttonBuyProduct: HTMLButtonElement;
-  constructor(container: HTMLElement, actions?: ICardActions) {
+  constructor(container: HTMLElement, protected events:IEvents, actions?: ICardActions) {
     super(container);
     this.cardCategory = ensureElement<HTMLElement>(".card__category", this.container);
     this.cardImage = ensureElement<HTMLImageElement>(".card__image", this.container);

@@ -374,9 +374,13 @@ Presenter - презентер содержит основную логику п
 Интерфейс для дженерика Component:
 
 Поля класса:
+`formErrors:{payment: string, address: string, phone: string, email: string}` - ошибки в заполнении формы
 
 Методы класса:
 
 #### Класс OrderFormView
 
 #### Класс ContactsFormView
+
+### Описание событий
+
