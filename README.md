@@ -208,3 +208,175 @@ Presenter - презентер содержит основную логику п
 Методы класса:
 `getProductList(): Promise<IProduct[]>` - возвращает набор товаров с сервера
 `orderProducts(order: IOrder): Promise<IOrder>` - отправка данных о покупке
+
+### Слой представления
+
+#### Класс HeaderView
+
+Отвечает за отображение и взаимодействие с кнопкой корзины товаров в хедере
+
+Конструктор класса ищет в разметке(<header class="header">) два поля класса.
+
+Интерфейс для дженерика Component:
+`HeaderData:{basketCounter:number}`
+
+Поля класса:
+`basketButton` - кнопка "Корзина" (<button class="header__basket">)
+`basketCounter:HTMLElement` - счетчик товаров в корзине (<span class="header__basket-counter">0</span>)
+
+Методы класса:
+`setCounter():void` - изменяет счетчик
+
+#### Класс GalleryView
+
+Отвечает за отображение каталога карточек товаров
+
+Конструктор класса ищет в разметке(<main class="gallery"></main>) поле класса.
+
+Интерфейс для дженерика Component:
+`GalleryData:{catalog:HTMLElement[]}`
+
+Поля класса:
+`gallery:HTMLElement` - галерея карточек
+
+Методы класса:
+`setCatalog(items:HTMLElement[]):void` - устанавливает каталог карточек
+
+#### Класс ModalView
+
+Отвечает за отображение модального окна
+
+Конструктор класса ищет в разметке(<div class="modal" id="modal-container">) поля класса.
+
+Интерфейс для дженерика Component:
+`ModalData:{content:HTMLElement}`
+
+Поля класса:
+`modalContent:HTMLElement` - Элемент с контентом(<div class="modal__content">)
+`modalClose:HTMLButtonElement` - Кнопка закрытия(<button class="modal__close" aria-label="закрыть"></button>)
+
+Методы класса:
+`setContent(content:HTMLElement):void` - устанавливает конктент в модальное окно
+
+#### Класс SuccessView
+
+Отвечает за отображение успешной покупки
+
+Конструктор класса ищет в разметке(<template id="success">) поля класса.
+
+Интерфейс для дженерика Component:
+`SuccessData:{orderSum:string}`
+
+Поля класса:
+`content:HTMLElement` - Элемент с контентом(<div class="order-success">)
+`orderSum:string` - сумма для списания(<p class="order-success__description">Списано 0 синапсов</p>)
+
+Методы класса:
+`setOrderSum(sum:string):void` - устанавливает списанную сумму
+
+#### Класс ProductCard
+
+Является родительским классом для: `GalleryProductCardView`,`PreviewProductCardView` и `BasketProductCardView`
+Отвечает за отображение общих полей для трёх дочерних классов отображения карочек с товаром.
+
+Конструктор класса ищет в разметке поля класса.
+
+Интерфейс для дженерика Component:
+`ProductCard:{cardTitle:string, cardPrice:number}`
+
+Поля класса:
+`cardTitle:string` - название товара в карточке
+`cardPrice:number` - стоимость товара в карточке
+
+Методы класса:
+`setTitle(cardTitle:string):void` - устанавливает название товара
+`setPrice(cardPrice:number):void` - устанавливает сумму товара
+
+#### Класс GalleryProductCardView
+
+Отвечает за отображение карточки товара в каталоге товаров
+
+Конструктор класса ищет в разметке <template id="card-catalog"> поля класса.
+
+Интерфейс для дженерика Component:
+`GalleryProductData:{cardCategory:string, card__image:string}`
+
+Поля класса:
+`cardCategory:string` - категория товара на карточке
+`cardImage:string` - ссылка на картинку товара на карточке
+<!-- `buttonGalleryProduct:HTMLButtonElement` - кнопка товара в каталоге -->
+
+Методы класса:
+`setCategory(category:string):void` - устанавливает категорию в карточке
+Тут не будет установки фотографии(в Component что-то есть)
+
+#### Класс PreviewProductCardView
+
+Отвечает за отображение карточки товара в модальном окне
+
+Конструктор класса ищет в разметке <template id="card-preview"> поля класса.
+
+Интерфейс для дженерика Component:
+`PreviewProductData:{cardCategory:string, card__image:string, text:string}`
+
+Поля класса:
+`cardCategory:string` - категория товара на карточке
+`cardImage:string` - ссылка на картинку товара на карточке
+`cardText:string` - описание товара на карточке
+`buttonBuyProduct:HTMLButtonElement` - кнопка покупки товара в модальном окне
+
+Методы класса:
+`setCategory(category:string):void` - устанавливает категорию в карточке
+`setDescription(text:string):void` - устанавливает описание товара в карточке
+Тут не будет установки фотографии(в Component что-то есть)
+
+#### Класс BasketProductCardView
+
+Отвечает за отображение карточки товара в модальном окне корзины товаров
+
+Конструктор класса ищет в разметке <template id="card-basket"> поля класса.
+
+Интерфейс для дженерика Component:
+`BasketProductData:{index:number}`
+
+Поля класса:
+`basketProductIndex:number` - номер товара в списке
+`buttonDeleteProduct:HTMLButtonElement` - кнопка покупки товара в модальном окне
+
+Методы класса:
+`setIndex(index:number):void` - устанавливает номер товара в карточке товара в корзине
+
+#### Класс BasketView
+
+Отввечает за отображение корзины товаров внутри модального окна
+
+Конструктор класса ищет в разметке <template id="basket"> поля класса.
+
+Интерфейс для дженерика Component:
+`BasketData:{basketList:HTMLElement[],basketPrice:string}`
+
+Поля класса:
+`basketList:HTMLElement[]` - список товаров в корзине(<ul class="basket__list">)
+`basketButton:HTMLButtonElement` - кнопка оформления заказа
+`basketPrice:string` - сумма товаров в корзине
+
+Методы класса:
+`setList(basketList:HTMLElement[]):void` - установить список товаров в корзине
+`setBasketPrice(basketPrice:string):void` - установить цену всей корзины
+
+#### Класс FormView
+
+Является родительским классом для: `OrderFormView` и `ContactsFormView`
+Отвечает за отображение общих полей для двух дочерних классов отображения форм.
+
+Конструктор класса ищет в разметке поля класса.
+
+Интерфейс для дженерика Component:
+
+Поля класса:
+
+Методы класса:
+
+#### Класс OrderFormView
+
+#### Класс ContactsFormView

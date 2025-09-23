@@ -45,3 +45,7 @@ export interface IOrder extends IBuyer {
   items: string[];
   total: number;
 }
+
+export interface ICardActions {
+  onClick: (event: MouseEvent) => void;
+}
