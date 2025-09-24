@@ -218,14 +218,14 @@ Presenter - презентер содержит основную логику п
 Конструктор класса ищет в разметке(<header class="header">) два поля класса.
 
 Интерфейс для дженерика Component:
-`HeaderData:{basketCounter:number}`
+`IHeaderData:{counter: number}`
 
 Поля класса:
-`basketButton` - кнопка "Корзина" (<button class="header__basket">)
-`basketCounter:HTMLElement` - счетчик товаров в корзине (<span class="header__basket-counter">0</span>)
+`protected basketButton: HTMLButtonElement` - кнопка "Корзина" (<button class="header__basket">)
+`protected basketCounter: HTMLElement` - счетчик товаров в корзине (<span class="header__basket-counter">0</span>)
 
 Методы класса:
-`setCounter():void` - изменяет счетчик
+`set counter(value: number):void` - изменяет счетчик
 
 #### Класс GalleryView
 
@@ -237,10 +237,10 @@ Presenter - презентер содержит основную логику п
 `GalleryData:{catalog:HTMLElement[]}`
 
 Поля класса:
-`gallery:HTMLElement` - галерея карточек
+`protected gallery: HTMLElement` - галерея карточек
 
 Методы класса:
-`setCatalog(items:HTMLElement[]):void` - устанавливает каталог карточек
+`set catalog(value: HTMLElement[]):void` - устанавливает каталог карточек
 
 #### Класс ModalView
 
@@ -252,11 +252,14 @@ Presenter - презентер содержит основную логику п
 `ModalData:{content:HTMLElement}`
 
 Поля класса:
-`modalContent:HTMLElement` - Элемент с контентом(<div class="modal__content">)
-`modalClose:HTMLButtonElement` - Кнопка закрытия(<button class="modal__close" aria-label="закрыть"></button>)
+`protected modal: HTMLElement` - Элемент, используемый для открытия и закрытия модального окна
+`protected modalContent: HTMLElement` - Элемент с контентом(<div class="modal__content">)
+`protected modalClose: HTMLButtonElement` - Кнопка закрытия(<button class="modal__close" aria-label="закрыть"></button>)
 
 Методы класса:
-`setContent(content:HTMLElement):void` - устанавливает конктент в модальное окно
+`set content(content: HTMLElement):void` - устанавливает конктент в модальное окно
+`open(): void` - открывает модальное окно
+`close(): void` - закрывает модальное окно
 
 #### Класс SuccessView
 
@@ -265,14 +268,14 @@ Presenter - презентер содержит основную логику п
 Конструктор класса ищет в разметке(<template id="success">) поля класса.
 
 Интерфейс для дженерика Component:
-`SuccessData:{orderSum:string}`
+`ISuccessData:{sum: string}`
 
 Поля класса:
-`content:HTMLElement` - Элемент с контентом(<div class="order-success">)
-`orderSum:string` - сумма для списания(<p class="order-success__description">Списано 0 синапсов</p>)
+`successButton: HTMLButtonElement` - кнопка возвращения на главную страницу
+`orderSum: HTMLElement` - сумма для списания(<p class="order-success__description">Списано 0 синапсов</p>)
 
 Методы класса:
-`setOrderSum(sum:string):void` - устанавливает списанную сумму
+`set sum(value: string):void` - устанавливает списанную сумму
 
 #### Класс ProductCard
 
@@ -282,15 +285,15 @@ Presenter - презентер содержит основную логику п
 Конструктор класса ищет в разметке поля класса.
 
 Интерфейс для дженерика Component:
-`ProductCard:{cardTitle:string, cardPrice:number}`
+`IProductCard:{title:string, price: number | null}`
 
 Поля класса:
-`cardTitle:string` - название товара в карточке
-`cardPrice:number` - стоимость товара в карточке
+`protected cardTitle: HTMLElement` - название товара в карточке
+`protected cardPrice: HTMLElement` - стоимость товара в карточке
 
 Методы класса:
-`setTitle(cardTitle:string):void` - устанавливает название товара
-`setPrice(cardPrice:number):void` - устанавливает сумму товара
+`set title(value: string):void` - устанавливает название товара
+`set price(value: number | null):void` - устанавливает сумму товара
 
 #### Класс GalleryProductCardView
 
@@ -298,17 +301,16 @@ Presenter - презентер содержит основную логику п
 
 Конструктор класса ищет в разметке <template id="card-catalog"> поля класса.
 
-Интерфейс для дженерика Component:
-`GalleryProductData:{cardCategory:string, card__image:string}`
+Тип для дженерика Component:
+`TCardGallery:Pick<IProduct,'image'|'category'>`
 
 Поля класса:
-`cardCategory:string` - категория товара на карточке
-`cardImage:string` - ссылка на картинку товара на карточке
-<!-- `buttonGalleryProduct:HTMLButtonElement` - кнопка товара в каталоге -->
+`protected cardCategory:HTMLElement` - категория товара на карточке
+`protected cardImage:HTMLImageElement` - картинка товара на карточке
 
 Методы класса:
-`setCategory(category:string):void` - устанавливает категорию в карточке
-Тут не будет установки фотографии(в Component что-то есть)
+`set category(value:string):void` - устанавливает категорию в карточке
+`set image(value:string)` - устанавливает картинку товара в карточке
 
 #### Класс PreviewProductCardView
 
@@ -316,19 +318,21 @@ Presenter - презентер содержит основную логику п
 
 Конструктор класса ищет в разметке <template id="card-preview"> поля класса.
 
-Интерфейс для дженерика Component:
-`PreviewProductData:{cardCategory:string, card__image:string, text:string}`
+Тип для дженерика Component:
+`TCardPreview: Pick<IProduct, "image" | "category" | "description">`
 
 Поля класса:
-`cardCategory:string` - категория товара на карточке
-`cardImage:string` - ссылка на картинку товара на карточке
-`cardText:string` - описание товара на карточке
-`buttonBuyProduct:HTMLButtonElement` - кнопка покупки товара в модальном окне
+`protected cardCategory: HTMLElement` - категория товара на карточке
+`protected cardImage: HTMLImageElement` - ссылка на картинку товара на карточке
+`protected cardText: HTMLElement` - описание товара на карточке
+`protected buttonBuyProduct: HTMLButtonElement` - кнопка покупки товара в модальном окне
 
 Методы класса:
-`setCategory(category:string):void` - устанавливает категорию в карточке
-`setDescription(text:string):void` - устанавливает описание товара в карточке
-Тут не будет установки фотографии(в Component что-то есть)
+`set category(value: string):void` - устанавливает категорию в карточке
+`set description(value: string):void` - устанавливает описание товара в карточке
+`set image(value: string)` - устанавливает картинку товара в карточке
+`setButtonText(text:string)` - устанавливает текст на кнопке
+`disableButton()` - блокирует кнопку покупки
 
 #### Класс BasketProductCardView
 
@@ -340,11 +344,11 @@ Presenter - презентер содержит основную логику п
 `BasketProductData:{index:number}`
 
 Поля класса:
-`basketProductIndex:number` - номер товара в списке
+`protected basketProductIndex: HTMLElement` - номер товара в списке
 `buttonDeleteProduct:HTMLButtonElement` - кнопка покупки товара в модальном окне
 
 Методы класса:
-`setIndex(index:number):void` - устанавливает номер товара в карточке товара в корзине
+`set index(value:number):void` - устанавливает номер товара в карточке товара в корзине
 
 #### Класс BasketView
 
@@ -353,16 +357,16 @@ Presenter - презентер содержит основную логику п
 Конструктор класса ищет в разметке <template id="basket"> поля класса.
 
 Интерфейс для дженерика Component:
-`BasketData:{basketList:HTMLElement[],basketPrice:string}`
+`BasketData:{itemList:HTMLElement[], price: string}`
 
 Поля класса:
-`basketList:HTMLElement[]` - список товаров в корзине(<ul class="basket__list">)
-`basketButton:HTMLButtonElement` - кнопка оформления заказа
-`basketPrice:string` - сумма товаров в корзине
+`protected basketList: HTMLElement` - список товаров в корзине(<ul class="basket__list">)
+`protected basketButton: HTMLButtonElement` - кнопка оформления заказа
+`protected basketPrice: HTMLElement` - сумма товаров в корзине
 
 Методы класса:
-`setList(basketList:HTMLElement[]):void` - установить список товаров в корзине
-`setBasketPrice(basketPrice:string):void` - установить цену всей корзины
+`set itemList(items: HTMLElement[]):void` - установить список товаров в корзине
+`set price(value: string):void` - установить цену всей корзины
 
 #### Класс FormView
 
@@ -372,15 +376,68 @@ Presenter - презентер содержит основную логику п
 Конструктор класса ищет в разметке поля класса.
 
 Интерфейс для дженерика Component:
+`IFormData:{errors: { payment: string; address: string; phone: string; email: string }}`
 
 Поля класса:
-`formErrors:{payment: string, address: string, phone: string, email: string}` - ошибки в заполнении формы
+`protected formErrors: HTMLElement` - отображение ошибок в заполнении формы
+`protected submitButton: HTMLButtonElement` - кнопка подтверждения заполнения формы
 
 Методы класса:
+`changeField(field: keyof T, value: string)` - вызывает событие изменения ввода данных в форму
+`set errors(errors: { payment: string; address: string; phone: string; email: string })` - устанавливает ошибки в заполнении формы
+`enableButton()` - включает кнопку подтверждения в форме
+`disableButton()` - блокирует кнопку подтверждения в форме
 
 #### Класс OrderFormView
 
+Отвечает за отображение формы с заполнением формы оплаты и адреса в модальном окне
+
+Конструктор класса ищет в разметке поля класса.
+
+Интерфейс для дженерика Component:
+`OrderData:{address: string}`
+
+Поля класса:
+`protected buttonOnline: HTMLButtonElement` - кнопка оплаты онлайн
+`protected buttonCash: HTMLButtonElement` - кнопка оплаты после покупки
+`protected orderAddress: HTMLInputElement` - адрес покупателя
+
+Методы класса:
+`set address(value: string)` - установить адрес
+`togglePayment(payment: TPayment): void` - метод отвечает за активную кнопку формы оплаты товара
+
 #### Класс ContactsFormView
 
-### Описание событий
+Отвечает за отображение формы с заполнением контактных данных в модальном окне
 
+Конструктор класса ищет в разметке поля класса.
+
+Интерфейс для дженерика Component:
+`ContactData:{email: string, phone: string}`
+
+Поля класса:
+`protected contactEmail: HTMLInputElement` - отвечает за ввод адреса электронной почты
+`protected contactPhone: HTMLInputElement` - отвечает за ввод номера телефона
+
+Методы класса:
+`set email(value: string)` - установить адрес электронной почты
+`set phone(value: string)` - установить номер телефона
+
+### Описание событий
+`catalogList:changed` - при изменении каталога
+`card:select` - при выборе карточки
+`basket:changed` - при изменении корзины
+`buyer:changed` - при изменении данных покупателя
+`card:buy` - при нажатии кнопки покупки/УДАЛЕНИЯ карты товара
+`basket:open` - при открытии корзины
+`card:remove` - при нажатии кнопки удаления карточки товара
+`basket:order` - при нажатии кнопки оформить заказ в корзине
+`order:online` - при нажатии кнопки выбора онлайн оплаты
+`order:cash` - при нажатии кнопки выбора оплаты после заказа
+`address:change` - при изменении адреса в вводе
+`order:change` - при изменении данных адреса и формы оплаты
+`order:submit` - при нажатии кнопки подтверждения в форме выора оплаты и адреса
+`phone:change` - при изменении номера телефона в вводе
+`email:change` - при изменении почты в вводе
+`contact:change` - при изменении контактной информации
+`success:close` - при нажатии на кнопку возврата после заказа

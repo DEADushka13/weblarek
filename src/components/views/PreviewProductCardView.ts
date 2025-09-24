@@ -12,7 +12,7 @@ export class PreviewProductCardView extends ProductCard<TCardPreview> {
   protected cardImage: HTMLImageElement;
   protected cardText: HTMLElement;
   protected buttonBuyProduct: HTMLButtonElement;
-  constructor(container: HTMLElement, protected events:IEvents, actions?: ICardActions) {
+  constructor(container: HTMLElement, protected events: IEvents, actions?: ICardActions) {
     super(container);
     this.cardCategory = ensureElement<HTMLElement>(".card__category", this.container);
     this.cardImage = ensureElement<HTMLImageElement>(".card__image", this.container);
@@ -34,4 +34,14 @@ export class PreviewProductCardView extends ProductCard<TCardPreview> {
   set image(value: string) {
     this.setImage(this.cardImage, value, this.title);
   }
+  setButtonText(text: string) {
+    this.buttonBuyProduct.textContent = text;
+  }
+  disableButton() {
+    this.buttonBuyProduct.disabled = true;
+  }
 }
+
+// если товар находится в корзине, кнопка должна быть заменена на «Удалить из корзины»;
+// при нажатии на кнопку «Удалить из корзины» товар удаляется из корзины;
+// после нажатия кнопки модальное окно закрывается;
