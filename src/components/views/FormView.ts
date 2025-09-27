@@ -1,4 +1,4 @@
-import { ICardActions } from "../../types";
+// import { ICardActions } from "../../types";
 import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { IEvents } from "../base/Events";
@@ -10,9 +10,8 @@ export class FormView<T> extends Component<T | IFormData> {
   protected formErrors: HTMLElement;
   protected submitButton: HTMLButtonElement;
   constructor(
-    container: HTMLElement,
+    protected container: HTMLFormElement,
     protected events: IEvents,
-    actions?: ICardActions
   ) {
     super(container);
     this.formErrors = ensureElement<HTMLElement>(
@@ -23,9 +22,14 @@ export class FormView<T> extends Component<T | IFormData> {
       "button[type=submit]",
       this.container
     );
-    if (actions?.onClick) {
-      this.submitButton.addEventListener("click", actions.onClick);
-    }
+
+    this.container.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.events.emit(`${this.container.name}:submit`);
+    });
+
+
+    
 
     this.container.addEventListener("input", (el) => {
       const target = el.target as HTMLInputElement;
@@ -38,7 +42,7 @@ export class FormView<T> extends Component<T | IFormData> {
   }
 
   changeField(field: keyof T, value: string) {
-    this.events.emit(`${String(field)}:change`, {value} );
+    this.events.emit(`${String(field)}:change`, { value });
   }
 
   set errors(errors: {

@@ -1,4 +1,4 @@
-import { ICardActions, TPayment } from "../../types";
+import { TPayment } from "../../types";
 import { ensureElement } from "../../utils/utils";
 import { IEvents } from "../base/Events";
 import { FormView } from "./FormView";
@@ -9,11 +9,20 @@ export class OrderFormView extends FormView<OrderData> {
   protected buttonOnline: HTMLButtonElement;
   protected buttonCash: HTMLButtonElement;
   protected orderAddress: HTMLInputElement;
-  constructor(container: HTMLElement, protected events: IEvents, actions?: ICardActions) {
-    super(container,events, actions);
-    this.orderAddress = ensureElement<HTMLInputElement>('input[name="address"]', this.container);
-    this.buttonOnline = ensureElement<HTMLButtonElement>('button[name="card"]', this.container);
-    this.buttonCash = ensureElement<HTMLButtonElement>('button[name="cash"]', this.container);
+  constructor(container: HTMLFormElement, protected events: IEvents) {
+    super(container, events);
+    this.orderAddress = ensureElement<HTMLInputElement>(
+      'input[name="address"]',
+      this.container
+    );
+    this.buttonOnline = ensureElement<HTMLButtonElement>(
+      'button[name="card"]',
+      this.container
+    );
+    this.buttonCash = ensureElement<HTMLButtonElement>(
+      'button[name="cash"]',
+      this.container
+    );
     this.buttonOnline.addEventListener("click", () => {
       this.events.emit("order:online");
     });

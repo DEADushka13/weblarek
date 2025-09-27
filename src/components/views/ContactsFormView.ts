@@ -1,4 +1,3 @@
-import { ICardActions } from "../../types";
 import { ensureElement } from "../../utils/utils";
 import { IEvents } from "../base/Events";
 import { FormView } from "./FormView";
@@ -11,10 +10,16 @@ interface ContactData {
 export class ContactsFormView extends FormView<ContactData> {
   protected contactEmail: HTMLInputElement;
   protected contactPhone: HTMLInputElement;
-  constructor(container: HTMLElement, protected events: IEvents, actions?: ICardActions) {
-    super(container, events, actions);
-    this.contactEmail = ensureElement<HTMLInputElement>('input[name="email"]', this.container);
-    this.contactPhone = ensureElement<HTMLInputElement>('input[name="phone"]', this.container);
+  constructor(protected container: HTMLFormElement, protected events: IEvents) {
+    super(container, events);
+    this.contactEmail = ensureElement<HTMLInputElement>(
+      'input[name="email"]',
+      this.container
+    );
+    this.contactPhone = ensureElement<HTMLInputElement>(
+      'input[name="phone"]',
+      this.container
+    );
   }
   set email(value: string) {
     this.contactEmail.value = value;

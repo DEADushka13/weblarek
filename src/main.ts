@@ -121,12 +121,8 @@ events.on("basket:changed", () => {
 
 const buyer = new Buyer(events);
 
-const orderForm = new OrderFormView(cloneTemplate("#order"), events, {
-  onClick: () => events.emit("order:submit"),
-});
-const contactForm = new ContactsFormView(cloneTemplate("#contacts"), events, {
-  onClick: () => events.emit("contact:submit"),
-});
+const orderForm = new OrderFormView(cloneTemplate("#order"), events);
+const contactForm = new ContactsFormView(cloneTemplate("#contacts"), events);
 events.on("buyer:changed", () => {
   orderForm.render;
   contactForm.render;
@@ -229,10 +225,9 @@ events.on("contact:change", () => {
   }
 });
 
-
 const success = new SuccessView(cloneTemplate("#success"), events);
 
-events.on("contact:submit", () => {
+events.on("contacts:submit", () => {
   success.sum = basket.getTotalBasketSum();
 
   const order: IOrder = {
@@ -253,21 +248,32 @@ events.on("contact:submit", () => {
   order.payment = buyer.getPayment();
   order.phone = String(buyer.getPhone());
   order.total = Number(basket.getTotalBasketSum().replace(" синапсов", ""));
-  // console.log(order);
+  console.log(order);
+  // const orderTest: IOrder = {
+  //   payment: "online",
+  //   email: "s",
+  //   phone: "s",
+  //   address: "S",
+  //   total: 123,
+  //   items: ["asd"],
+  // };
   productApi
     .orderProducts(order)
     .then(({ id, total }) => {
       events.emit("success:open", { id, total });
     })
     .catch((err) => {
-      console.error("Ошибка при отправке заказа:", err.response ? err.response : err.message);
+      console.error(
+        "Ошибка при отправке заказа:",
+        err.response ? err.response : err.message
+      );
       alert("Не удалось отправить заказ");
     });
 });
 
 // при нажатии на кнопку оплаты выполняется передача данных о заказе на сервер,
 // появляется сообщение об успешной оплате, товары удаляются из корзины, данные покупателя очищаются.
-events.on<{id:string,total:number}>("success:open", ({ id, total }) => {
+events.on<{ id: string; total: number }>("success:open", ({ id, total }) => {
   console.log(`Айди заказа: ${id} на сумму ${total}`);
   modal.render({ content: success.render() });
 });
