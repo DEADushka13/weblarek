@@ -12,11 +12,22 @@ export class ModalView extends Component<IModalData> {
 
   constructor(container: HTMLElement, protected events: IEvents) {
     super(container);
-    this.modalContent = ensureElement<HTMLElement>(".modal__content", this.container);
-    this.modalClose = ensureElement<HTMLButtonElement>(".modal__close", this.container);
+    this.modalContent = ensureElement<HTMLElement>(
+      ".modal__content",
+      this.container
+    );
+    this.modalClose = ensureElement<HTMLButtonElement>(
+      ".modal__close",
+      this.container
+    );
     this.modal = ensureElement<HTMLElement>(".modal", this.container);
     this.modalClose.addEventListener("click", () => {
       this.close();
+    });
+    this.modal.addEventListener("click", (evt) => {
+      if (evt.currentTarget === evt.target) {
+        this.close();
+      }
     });
   }
   set content(content: HTMLElement) {
@@ -34,4 +45,3 @@ export class ModalView extends Component<IModalData> {
     this.modal.classList.remove("modal_active");
   }
 }
-

@@ -1,6 +1,6 @@
 import { ProductCatalog } from "./components/Models/ProductCatalog";
 import "./scss/styles.scss";
-import { apiProducts } from "./utils/data";
+// import { apiProducts } from "./utils/data";
 import { Api } from "./components/base/Api";
 import { ProductApi } from "./components/ProductApi";
 import { API_URL, CDN_URL } from "./utils/constants";
@@ -8,7 +8,7 @@ import { Basket } from "./components/Models/Basket";
 import { Buyer } from "./components/Models/Buyer";
 import { GalleryProductCardView } from "./components/views/GalleryProductCardView";
 import { cloneTemplate, ensureElement } from "./utils/utils";
-import { EventEmitter, IEvents } from "./components/base/Events";
+import { EventEmitter } from "./components/base/Events";
 import { GalleryView } from "./components/views/GalleryView";
 import { OrderFormView } from "./components/views/OrderFormView";
 import { IOrder, IProduct } from "./types";
@@ -26,7 +26,8 @@ const productApi = new ProductApi(api, CDN_URL);
 const events = new EventEmitter();
 const productCatalog = new ProductCatalog(events);
 const gallery = new GalleryView(document.body);
-const productPreviewTemplate = ensureElement<HTMLTemplateElement>("#card-preview");
+const productPreviewTemplate =
+  ensureElement<HTMLTemplateElement>("#card-preview");
 const modal = new ModalView(document.body, events);
 const basket = new Basket(events);
 const headerView = new HeaderView(events, document.body);
@@ -59,9 +60,13 @@ events.on("catalogList:changed", () => {
 
 events.on("card:select", (item: IProduct) => {
   const product = productCatalog.getProduct(item.id);
-  const card = new PreviewProductCardView(cloneTemplate(productPreviewTemplate), events, {
-    onClick: () => events.emit("card:buy", item),
-  });
+  const card = new PreviewProductCardView(
+    cloneTemplate(productPreviewTemplate),
+    events,
+    {
+      onClick: () => events.emit("card:buy", item),
+    }
+  );
   if (product) {
     if (basket.checkProduct(product.id)) {
       card.setButtonText("Удалить из корзины");
@@ -89,9 +94,12 @@ events.on("basket:changed", () => {
   let index = 1;
   let itemList: HTMLElement[] = [];
   basket.getProductList().forEach((item) => {
-    const basketCard = new BasketProductCardView(cloneTemplate("#card-basket"), {
-      onClick: () => events.emit("card:remove", item),
-    });
+    const basketCard = new BasketProductCardView(
+      cloneTemplate("#card-basket"),
+      {
+        onClick: () => events.emit("card:remove", item),
+      }
+    );
     basketCard.index = index;
     index++;
     basketCard.price = item.price;
@@ -100,6 +108,11 @@ events.on("basket:changed", () => {
   });
   basketView.itemList = itemList;
   itemList = [];
+  if (basket.getProductCounter() === 0) {
+    basketView.disableButton();
+  } else {
+    basketView.enableButton();
+  }
   basketView.render();
 });
 
@@ -136,6 +149,8 @@ events.on("card:buy", (item: IProduct) => {
 events.on("basket:open", () => {
   if (basket.getProductCounter() === 0) {
     basketView.disableButton();
+  } else {
+    basketView.enableButton();
   }
   modal.render({ content: basketView.render() });
   modal.open();
@@ -165,18 +180,21 @@ events.on("order:cash", () => {
   events.emit("order:change");
 });
 
-events.on("address:change", (value) => {
-  buyer.setAddress(String(value));
+events.on<{ value: string }>("address:change", (value) => {
+  buyer.setAddress(value.value);
   events.emit("order:change");
 });
 
 events.on("order:change", () => {
-  const orderErrors = buyer.chekData();
+  let orderErrors = buyer.chekData();
+  orderErrors.phone = "";
+  orderErrors.email = "";
   if (!orderErrors.address && !orderErrors.payment) {
     orderForm.enableButton();
   } else {
     orderForm.disableButton();
     orderForm.errors = orderErrors;
+    // orderForm.errors.payment = orderErrors.payment;
   }
 });
 
@@ -187,45 +205,72 @@ events.on("order:submit", () => {
   modal.render({ content: contactForm.render() });
 });
 
-events.on("phone:change", (value) => {
-  buyer.setPhone(String(value));
+events.on<{ value: string }>("phone:change", (value) => {
+  buyer.setPhone(value.value);
   events.emit("contact:change");
 });
 
-events.on("email:change", (value) => {
-  buyer.setEmail(String(value));
+events.on<{ value: string }>("email:change", (value) => {
+  if (!value) {
+    contactForm.disableButton();
+  }
+  buyer.setEmail(value.value);
   events.emit("contact:change");
 });
 
 events.on("contact:change", () => {
-  const orderErrors = buyer.chekData();
-  if (!orderErrors.phone && !orderErrors.email) {
+  const contactErrors = buyer.chekData();
+  if (!contactErrors.phone && !contactErrors.email) {
     contactForm.enableButton();
   } else {
     contactForm.disableButton();
-    contactForm.errors = orderErrors;
+    contactForm.errors = contactErrors;
+    // orderForm.errors.email = orderErrors.email;
   }
 });
+
+
 const success = new SuccessView(cloneTemplate("#success"), events);
 
 events.on("contact:submit", () => {
   success.sum = basket.getTotalBasketSum();
 
-  const order: IOrder = { address: "", email: "", items: [], payment: "", phone: "", total: 0 };
+  const order: IOrder = {
+    payment: "",
+    email: "",
+    phone: "",
+    address: "",
+    total: 0,
+    items: [],
+  };
   order.address = buyer.getAddress();
+  // order.address = "123";
   order.email = buyer.getEmail();
   order.items = basket.getProductList().map((el) => {
     return el.id;
   });
+
   order.payment = buyer.getPayment();
-  order.phone = buyer.getPhone();
+  order.phone = String(buyer.getPhone());
   order.total = Number(basket.getTotalBasketSum().replace(" синапсов", ""));
-  productApi.orderProducts(order);
-  modal.render({ content: success.render() });
+  // console.log(order);
+  productApi
+    .orderProducts(order)
+    .then(({ id, total }) => {
+      events.emit("success:open", { id, total });
+    })
+    .catch((err) => {
+      console.error("Ошибка при отправке заказа:", err.response ? err.response : err.message);
+      alert("Не удалось отправить заказ");
+    });
 });
 
 // при нажатии на кнопку оплаты выполняется передача данных о заказе на сервер,
 // появляется сообщение об успешной оплате, товары удаляются из корзины, данные покупателя очищаются.
+events.on<{id:string,total:number}>("success:open", ({ id, total }) => {
+  console.log(`Айди заказа: ${id} на сумму ${total}`);
+  modal.render({ content: success.render() });
+});
 
 events.on("success:close", () => {
   modal.close();

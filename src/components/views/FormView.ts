@@ -9,10 +9,20 @@ interface IFormData {
 export class FormView<T> extends Component<T | IFormData> {
   protected formErrors: HTMLElement;
   protected submitButton: HTMLButtonElement;
-  constructor(container: HTMLElement, protected events: IEvents, actions?: ICardActions) {
+  constructor(
+    container: HTMLElement,
+    protected events: IEvents,
+    actions?: ICardActions
+  ) {
     super(container);
-    this.formErrors = ensureElement<HTMLElement>(".form__errors", this.container);
-    this.submitButton = ensureElement<HTMLButtonElement>("button[type=submit]", this.container);
+    this.formErrors = ensureElement<HTMLElement>(
+      ".form__errors",
+      this.container
+    );
+    this.submitButton = ensureElement<HTMLButtonElement>(
+      "button[type=submit]",
+      this.container
+    );
     if (actions?.onClick) {
       this.submitButton.addEventListener("click", actions.onClick);
     }
@@ -28,10 +38,15 @@ export class FormView<T> extends Component<T | IFormData> {
   }
 
   changeField(field: keyof T, value: string) {
-    this.events.emit(`${String(field)}:change`, { value });
+    this.events.emit(`${String(field)}:change`, {value} );
   }
 
-  set errors(errors: { payment: string; address: string; phone: string; email: string }) {
+  set errors(errors: {
+    payment: string;
+    address: string;
+    phone: string;
+    email: string;
+  }) {
     if (errors.address !== "") {
       this.formErrors.textContent = errors.address;
     }
@@ -48,6 +63,7 @@ export class FormView<T> extends Component<T | IFormData> {
 
   enableButton() {
     this.submitButton.disabled = false;
+    this.formErrors.textContent = "";
   }
   disableButton() {
     this.submitButton.disabled = true;

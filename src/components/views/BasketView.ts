@@ -1,4 +1,4 @@
-import { ICardActions } from "../../types";
+// import { ICardActions } from "../../types";
 import { createElement, ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { IEvents } from "../base/Events";
@@ -15,9 +15,18 @@ export class BasketView extends Component<IBasketData> {
   constructor(container: HTMLElement, protected events: IEvents) {
     super(container);
     this.events = events;
-    this.basketList = ensureElement<HTMLUListElement>(".basket__list", this.container);
-    this.basketButton = ensureElement<HTMLButtonElement>(".basket__button", this.container);
-    this.basketPrice = ensureElement<HTMLElement>(".basket__price", this.container);
+    this.basketList = ensureElement<HTMLUListElement>(
+      ".basket__list",
+      this.container
+    );
+    this.basketButton = ensureElement<HTMLButtonElement>(
+      ".basket__button",
+      this.container
+    );
+    this.basketPrice = ensureElement<HTMLElement>(
+      ".basket__price",
+      this.container
+    );
     this.basketButton.addEventListener("click", () => {
       this.events.emit("basket:order");
     });
@@ -28,7 +37,9 @@ export class BasketView extends Component<IBasketData> {
     if (items.length > 0) {
       items.forEach((item) => this.basketList.appendChild(item));
     } else {
-      this.basketList.replaceChildren(createElement("p", { textContent: "Корзина пуста" }));
+      this.basketList.replaceChildren(
+        createElement("p", { textContent: "Корзина пуста" })
+      );
     }
   }
   set price(value: string) {
@@ -38,6 +49,12 @@ export class BasketView extends Component<IBasketData> {
     // const emptyBasket = new HTMLElement();
     // emptyBasket.innerHTML = "<div>Корзина пуста</div>";
     this.basketButton.disabled = true;
+    this.basketList.replaceChildren(
+      createElement("p", { textContent: "Корзина пуста" })
+    );
     // this.basketList.replaceChildren(emptyBasket);
+  }
+  enableButton(){
+    this.basketButton.disabled = false;
   }
 }
