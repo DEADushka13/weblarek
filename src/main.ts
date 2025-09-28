@@ -176,8 +176,8 @@ events.on("order:cash", () => {
   events.emit("order:change");
 });
 
-events.on<{ value: string }>("address:change", (value) => {
-  buyer.setAddress(value.value);
+events.on<{ value: string }>("address:change", (data) => {
+  buyer.setAddress(data.value);
   events.emit("order:change");
 });
 
@@ -201,16 +201,16 @@ events.on("order:submit", () => {
   modal.render({ content: contactForm.render() });
 });
 
-events.on<{ value: string }>("phone:change", (value) => {
-  buyer.setPhone(value.value);
+events.on<{ value: string }>("phone:change", (data) => {
+  buyer.setPhone(data.value);
   events.emit("contact:change");
 });
 
-events.on<{ value: string }>("email:change", (value) => {
-  if (!value) {
+events.on<{ value: string }>("email:change", (data) => {
+  if (!data) {
     contactForm.disableButton();
   }
-  buyer.setEmail(value.value);
+  buyer.setEmail(data.value);
   events.emit("contact:change");
 });
 
